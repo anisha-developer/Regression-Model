@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.config import DATA_PATH, MODEL_PATH
+from backend.app.config import MODEL_PATH
 from backend.app.schemas import (
     HealthResponse,
     ModelInfoResponse,
@@ -53,11 +53,7 @@ def health() -> HealthResponse:
 @app.get("/model-info", response_model=ModelInfoResponse)
 def model_info() -> ModelInfoResponse:
     metrics = load_metrics()
-    dataset_size = 2000
-    if DATA_PATH.exists():
-        import pandas as pd
-
-        dataset_size = len(pd.read_csv(DATA_PATH))
+    dataset_size = int(metrics.get("dataset_size", 2000))
     return ModelInfoResponse(
         model_name=metrics.get("model_name", "Lasso Regression"),
         r2=metrics.get("r2", 0.957),

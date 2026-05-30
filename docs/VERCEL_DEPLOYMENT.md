@@ -316,6 +316,19 @@ Get-NetTCPConnection -LocalPort 8000 | Select-Object OwningProcess
 Stop-Process -Id <PID> -Force
 ```
 
+### `Total bundle size exceeds the size limit (245 MB)`
+
+**Cause:** The API bundle included the full virtualenv (scipy/sklearn/pandas) plus repo files, often worsened by a custom `installCommand`.
+
+**Fix in this repo:**
+
+- Removed custom `installCommand` (Vercel optimizes `uv.lock` installs)
+- Slim `pyproject.toml` (no uvicorn/mangum on deploy)
+- `includeFiles` only `models/**` (not `data/**`)
+- `excludeFiles` for frontend, docs, tests, notebooks
+
+Redeploy after pushing. If still over limit, check build logs for accidental inclusion of `node_modules` or `.venv`.
+
 ### `No Output Directory named "dist" found`
 
 **Cause:** Vite builds to `frontend/dist`, but Vercel looked for `dist` at the repo root.

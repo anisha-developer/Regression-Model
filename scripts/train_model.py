@@ -68,6 +68,7 @@ def main() -> None:
         "cost_p75": float(df["insurance_cost"].quantile(0.75)),
         "cost_min": float(df["insurance_cost"].min()),
         "cost_max": float(df["insurance_cost"].max()),
+        "dataset_size": len(df),
     }
 
     MODEL_PATH.parent.mkdir(parents=True, exist_ok=True)

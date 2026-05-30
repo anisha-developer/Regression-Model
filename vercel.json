@@ -19,8 +19,25 @@
       "entrypoint": "backend/app/main.py",
       "framework": "fastapi",
       "routePrefix": "/api",
-      "installCommand": "uv python pin 3.12 && uv sync --frozen --no-dev",
-      "includeFiles": ["models/**", "data/**"],
+      "includeFiles": ["models/**"],
+      "excludeFiles": [
+        "frontend/**",
+        "node_modules/**",
+        "data/**",
+        "docs/**",
+        "scripts/**",
+        "api/**",
+        "*.ipynb",
+        "medical_insurance_dataset.csv",
+        "package-lock.json",
+        "frontend/package-lock.json",
+        "**/__pycache__/**",
+        "**/tests/**",
+        "**/test/**",
+        "**/*.tests/**",
+        "**/site-packages/**/tests/**",
+        "**/site-packages/**/test/**"
+      ],
       "maxDuration": 60,
       "memory": 1024
     }

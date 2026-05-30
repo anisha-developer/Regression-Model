@@ -5,8 +5,8 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from backend.app.config import METRICS_PATH, MODEL_PATH
-from backend.app.schemas import PredictionRequest, PredictionResponse
+from app.config import METRICS_PATH, MODEL_PATH
+from app.schemas import PredictionRequest, PredictionResponse
 
 FEATURE_COLUMNS = [
     "age",

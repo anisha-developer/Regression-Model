@@ -2,7 +2,6 @@
 name = "premiumiq-api"
 version = "1.0.0"
 requires-python = ">=3.12,<3.13"
-# Minimal runtime deps for Vercel (no uvicorn/mangum — platform runs ASGI)
 dependencies = [
     "fastapi==0.115.6",
     "pydantic==2.10.4",
@@ -14,8 +13,3 @@ dependencies = [
 
 [tool.vercel]
 entrypoint = "app.main:app"
-
-[tool.uv]
-package = false
-managed = true
-python-preference = "only-managed"

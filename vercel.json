@@ -15,8 +15,8 @@
       "routePrefix": "/"
     },
     "api": {
-      "root": ".",
-      "entrypoint": "backend/app/main.py",
+      "root": "backend",
+      "entrypoint": "app/main.py",
       "framework": "fastapi",
       "routePrefix": "/api",
       "includeFiles": ["models/**"],
@@ -28,15 +28,7 @@
         "scripts/**",
         "api/**",
         "*.ipynb",
-        "medical_insurance_dataset.csv",
-        "package-lock.json",
-        "frontend/package-lock.json",
-        "**/__pycache__/**",
-        "**/tests/**",
-        "**/test/**",
-        "**/*.tests/**",
-        "**/site-packages/**/tests/**",
-        "**/site-packages/**/test/**"
+        "medical_insurance_dataset.csv"
       ],
       "maxDuration": 60,
       "memory": 1024

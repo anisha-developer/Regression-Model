@@ -132,7 +132,7 @@ After Vercel reads **`vercel.json`**, you should see **two services**:
 | Service | Path | Framework |
 |---------|------|-----------|
 | **frontend** | `frontend/` (`root` + `entrypoint: .`) | Vite → output `frontend/dist` |
-| **api** | `backend/app/main.py` | FastAPI (`routePrefix: /api`) |
+| **api** | `backend/` → `app/main.py` | FastAPI (`routePrefix: /api`, routes `/health`, `/predict`) |
 
 Public URLs stay `/api/health`, `/api/predict` — Vercel mounts the API service under `/api`; route handlers inside FastAPI use `/health`, `/predict`, etc.
 
@@ -334,6 +334,16 @@ Redeploy after pushing. If still over limit, check build logs for accidental inc
 **Cause:** Vite builds to `frontend/dist`, but Vercel looked for `dist` at the repo root.
 
 **Fix:** Root `vercel.json` sets `"outputDirectory": "frontend/dist"`. Ensure the latest commit is deployed.
+
+### `ModuleNotFoundError: No module named 'backend'`
+
+Vercel deploys `backend/app/` as the `app` package (`/var/task/app/main.py`). Imports must use `from app.config import ...`, not `from backend.app...`.
+
+The API service `root` is `backend` with `entrypoint: app/main.py`. Redeploy after pulling the latest commit.
+
+### `/api/api/predict` (404 or 500)
+
+Usually an old deploy where routes still had an `/api` prefix **and** `routePrefix: /api`. Current routes are `/predict`, `/health` (public URL `/api/predict`).
 
 ### SPA routes 404 on refresh
 

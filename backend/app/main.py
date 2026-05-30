@@ -3,14 +3,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.config import MODEL_PATH
-from backend.app.schemas import (
+from app.config import MODEL_PATH
+from app.schemas import (
     HealthResponse,
     ModelInfoResponse,
     PredictionRequest,
     PredictionResponse,
 )
-from backend.app.services.predictor import FEATURE_COLUMNS, load_metrics, load_model, predict
+from app.services.predictor import FEATURE_COLUMNS, load_metrics, load_model, predict
 
 
 @asynccontextmanager

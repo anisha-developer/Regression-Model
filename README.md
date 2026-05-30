@@ -55,7 +55,7 @@ npm run dev:web   # frontend only
 | GET | `/api/model-info` | Model metrics & features |
 | POST | `/api/predict` | Premium forecast |
 
-On Vercel, the **api** service uses `routePrefix: /api`; handlers in `backend/app/main.py` are `/health`, `/model-info`, `/predict`.
+On Vercel, the **api** service uses `root: backend`, `routePrefix: /api`, and handlers `app/main.py` at `/health`, `/model-info`, `/predict` (public: `/api/health`, etc.).
 
 ## Project structure
 

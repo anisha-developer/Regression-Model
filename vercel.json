@@ -1,5 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "outputDirectory": "frontend/dist",
   "build": {
     "env": {
       "UV_PYTHON": "3.12",
@@ -8,13 +9,13 @@
   },
   "experimentalServices": {
     "frontend": {
-      "workspace": "frontend",
+      "root": "frontend",
+      "entrypoint": ".",
       "framework": "vite",
-      "routePrefix": "/",
-      "buildCommand": "npm ci && npm run build"
+      "routePrefix": "/"
     },
     "api": {
-      "workspace": ".",
+      "root": ".",
       "entrypoint": "backend/app/main.py",
       "framework": "fastapi",
       "routePrefix": "/api",

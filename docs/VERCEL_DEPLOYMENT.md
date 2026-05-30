@@ -131,7 +131,7 @@ After Vercel reads **`vercel.json`**, you should see **two services**:
 
 | Service | Path | Framework |
 |---------|------|-----------|
-| **frontend** | `frontend/` | Vite (`routePrefix: /`) |
+| **frontend** | `frontend/` (`root` + `entrypoint: .`) | Vite → output `frontend/dist` |
 | **api** | `backend/app/main.py` | FastAPI (`routePrefix: /api`) |
 
 Public URLs stay `/api/health`, `/api/predict` — Vercel mounts the API service under `/api`; route handlers inside FastAPI use `/health`, `/predict`, etc.
@@ -315,6 +315,12 @@ Unrelated to Vercel. Another process is using port 8000:
 Get-NetTCPConnection -LocalPort 8000 | Select-Object OwningProcess
 Stop-Process -Id <PID> -Force
 ```
+
+### `No Output Directory named "dist" found`
+
+**Cause:** Vite builds to `frontend/dist`, but Vercel looked for `dist` at the repo root.
+
+**Fix:** Root `vercel.json` sets `"outputDirectory": "frontend/dist"`. Ensure the latest commit is deployed.
 
 ### SPA routes 404 on refresh
 

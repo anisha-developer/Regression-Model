@@ -140,7 +140,13 @@ If you still see `backend` as a Web Service and **Python** at `/`:
 
 **Do not** override Build Command / Output Directory in the dashboard — `vercel.json` defines each service.
 
-### 3.3 Environment variables
+### 3.3 Node.js version (important)
+
+In **Project Settings → General → Node.js Version**, choose **22.x** (or 20.x).
+
+Vercel uses Node to orchestrate Python installs. Without Node 20+/22+, Python can fall back to older tooling and wrong versions.
+
+### 3.4 Environment variables
 
 None are required for the default setup. Optional later:
 
@@ -148,7 +154,7 @@ None are required for the default setup. Optional later:
 |----------|---------|
 | `VITE_API_URL` | Only if API is on another domain (leave empty for same-origin `/api`) |
 
-### 3.4 Deploy
+### 3.5 Deploy
 
 Click **Deploy**. First build typically takes **2–5 minutes** (Python + Node install).
 
@@ -255,6 +261,10 @@ frontend/dist/           # Generated at build (not in git)
 3. `git add models/insurance_model.pkl` and push  
 4. Redeploy  
 
+### `invalid runtime "python3.12"`
+
+Do **not** put `"runtime": "python3.12"` in `experimentalServices`. That field only accepts specific Lambda identifiers (e.g. `python3.14`), not patch versions. Use `pyproject.toml` + `.python-version` instead.
+
 ### Build fails on `pip install` / `pydantic-core` / Python 3.14
 
 **Symptom:** `Python interpreter version (3.14) is newer than PyO3's maximum supported version (3.13)` when building `pydantic-core`.
@@ -263,8 +273,9 @@ frontend/dist/           # Generated at build (not in git)
 
 **Fix (already in this repo):** Python is pinned to **3.12** via:
 
-- `runtime.txt` and `.python-version`
-- `vercel.json` → api service: `"runtime": "python3.12"` and `uv pip install --python 3.12 ...`
+- `runtime.txt`, `.python-version`, and `pyproject.toml` (`requires-python = ">=3.12,<3.13"`)
+- `pip install` (not `uv`) in `vercel.json` — do **not** set `"runtime": "python3.12"` (invalid in Services)
+- Vercel project setting: **Node.js 22.x** (required for Python 3.12 on Vercel)
 
 Push the latest commit and redeploy. In the build log you should see **CPython 3.12**, not 3.14.
 

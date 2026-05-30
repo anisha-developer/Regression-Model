@@ -13,7 +13,7 @@ Browser
    │
    ├─ GET  /, /assets/*         →  frontend service (Vite → static)
    │
-   └─ GET/POST /api/*           →  api service (FastAPI: backend/app/main.py)
+   └─ GET/POST /api/*           →  api service (routePrefix /api → FastAPI /health, /predict, …)
                                       └─ loads models/insurance_model.pkl
 ```
 
@@ -127,8 +127,10 @@ After Vercel reads **`vercel.json`**, you should see **two services**:
 
 | Service | Path | Framework |
 |---------|------|-----------|
-| **frontend** | `frontend/` | Vite |
-| **api** | `backend/app/main.py` | FastAPI |
+| **frontend** | `frontend/` | Vite (`routePrefix: /`) |
+| **api** | `backend/app/main.py` | FastAPI (`routePrefix: /api`) |
+
+Public URLs stay `/api/health`, `/api/predict` — Vercel mounts the API service under `/api`; route handlers inside FastAPI use `/health`, `/predict`, etc.
 
 If you still see `backend` as a Web Service and **Python** at `/`:
 

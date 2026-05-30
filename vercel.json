@@ -11,7 +11,7 @@
       "workspace": ".",
       "entrypoint": "backend/app/main.py",
       "framework": "fastapi",
-      "routePrefix": "/",
+      "routePrefix": "/api",
       "installCommand": "pip install -r backend/requirements.txt",
       "includeFiles": ["models/**", "data/**"],
       "maxDuration": 60,

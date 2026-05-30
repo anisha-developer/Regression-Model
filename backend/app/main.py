@@ -39,7 +39,7 @@ app.add_middleware(
 )
 
 
-@app.get("/api/health", response_model=HealthResponse)
+@app.get("/health", response_model=HealthResponse)
 def health() -> HealthResponse:
     loaded = MODEL_PATH.exists()
     metrics = load_metrics() if loaded else {}
@@ -50,7 +50,7 @@ def health() -> HealthResponse:
     )
 
 
-@app.get("/api/model-info", response_model=ModelInfoResponse)
+@app.get("/model-info", response_model=ModelInfoResponse)
 def model_info() -> ModelInfoResponse:
     metrics = load_metrics()
     dataset_size = 2000
@@ -68,7 +68,7 @@ def model_info() -> ModelInfoResponse:
     )
 
 
-@app.post("/api/predict", response_model=PredictionResponse)
+@app.post("/predict", response_model=PredictionResponse)
 def predict_endpoint(payload: PredictionRequest) -> PredictionResponse:
     try:
         return predict(payload)

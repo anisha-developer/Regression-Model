@@ -11,8 +11,9 @@
       "workspace": ".",
       "entrypoint": "backend/app/main.py",
       "framework": "fastapi",
+      "runtime": "python3.12",
       "routePrefix": "/api",
-      "installCommand": "pip install -r backend/requirements.txt",
+      "installCommand": "uv pip install --python 3.12 --system -r backend/requirements.txt",
       "includeFiles": ["models/**", "data/**"],
       "maxDuration": 60,
       "memory": 1024

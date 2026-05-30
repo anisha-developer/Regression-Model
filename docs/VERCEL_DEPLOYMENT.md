@@ -255,11 +255,24 @@ frontend/dist/           # Generated at build (not in git)
 3. `git add models/insurance_model.pkl` and push  
 4. Redeploy  
 
-### Build fails on `pip install`
+### Build fails on `pip install` / `pydantic-core` / Python 3.14
 
-- Confirm `requirements.txt` exists at repo root  
+**Symptom:** `Python interpreter version (3.14) is newer than PyO3's maximum supported version (3.13)` when building `pydantic-core`.
+
+**Cause:** Vercel’s default `uv` resolver picked **Python 3.14**, which has no prebuilt wheels for some ML dependencies.
+
+**Fix (already in this repo):** Python is pinned to **3.12** via:
+
+- `runtime.txt` and `.python-version`
+- `vercel.json` → api service: `"runtime": "python3.12"` and `uv pip install --python 3.12 ...`
+
+Push the latest commit and redeploy. In the build log you should see **CPython 3.12**, not 3.14.
+
+### Build fails on `pip install` (other)
+
+- Confirm `backend/requirements.txt` exists  
 - Check Vercel build logs for incompatible package versions  
-- Python runtime on Vercel is typically **3.12**; train with 3.11+ locally  
+- Train locally with Python **3.11 or 3.12** (not 3.14)  
 
 ### Build fails on `npm ci` in frontend
 

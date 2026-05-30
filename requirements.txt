@@ -1,1 +1,5 @@
+# Python dependencies are installed from backend/requirements.txt (see vercel.json api service).
+# Install locally with:
+#   pip install -r backend/requirements.txt
+
 -r backend/requirements.txt

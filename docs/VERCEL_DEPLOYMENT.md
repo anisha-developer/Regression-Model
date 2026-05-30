@@ -4,26 +4,29 @@ Deploy the full-stack app (React UI + FastAPI ML API) to Vercel in one project. 
 
 ---
 
-## Architecture on Vercel
+## Architecture on Vercel (Services preset)
+
+This project uses Vercel **Services** (`experimentalServices` in `vercel.json`) — one domain, two services:
 
 ```
 Browser
    │
-   ├─ GET  /                    →  frontend/dist/index.html (static)
-   ├─ GET  /assets/*            →  static files from Vite build
+   ├─ GET  /, /assets/*         →  frontend service (Vite → static)
    │
-   └─ GET/POST /api/*           →  api/index.py (Python serverless + Mangum)
+   └─ GET/POST /api/*           →  api service (FastAPI: backend/app/main.py)
                                       └─ loads models/insurance_model.pkl
 ```
 
 | Path | Handler |
 |------|---------|
-| `/`, `/features`, etc. | SPA (`index.html` rewrite) |
-| `/api/health` | FastAPI |
+| `/`, `/features`, etc. | **frontend** service (`frontend/`, framework: vite) |
+| `/api/health` | **api** service (`backend/app/main.py`, framework: fastapi) |
 | `/api/model-info` | FastAPI |
 | `/api/predict` | FastAPI |
 
 Configuration lives in **`vercel.json`** at the repo root.
+
+> **Do not** use the auto-detected layout (`backend` + root `Python`). That happens when `experimentalServices` is missing. The committed `vercel.json` overrides it with **frontend** + **api**.
 
 ---
 
@@ -44,7 +47,7 @@ The API needs `models/insurance_model.pkl` in the repository. Vercel does not ru
 ```powershell
 cd "c:\Users\anish\Downloads\Regression Model"
 
-pip install -r requirements.txt
+pip install -r backend/requirements.txt
 python scripts/train_model.py
 ```
 
@@ -111,19 +114,29 @@ Replace `YOUR_USERNAME` and `YOUR_REPO` with your GitHub details.
 3. **Import** your GitHub repository  
 4. Authorize Vercel to access the repo if prompted  
 
-### 3.2 Configure the project (usually auto-detected)
+### 3.2 Configure the project (Services preset)
 
-Vercel reads **`vercel.json`**. You should see:
+On the import screen:
 
 | Setting | Value |
 |---------|--------|
-| **Framework Preset** | Other |
-| **Root Directory** | `./` (repository root) |
-| **Build Command** | `cd frontend && npm ci && npm run build` |
-| **Output Directory** | `frontend/dist` |
-| **Install Command** | `pip install -r requirements.txt` |
+| **Application Preset** | **Services** |
+| **Root Directory** | `./` (repository root — not `backend` or `frontend`) |
 
-**Do not override** these unless you know what you are changing — `vercel.json` already defines them.
+After Vercel reads **`vercel.json`**, you should see **two services**:
+
+| Service | Path | Framework |
+|---------|------|-----------|
+| **frontend** | `frontend/` | Vite |
+| **api** | `backend/app/main.py` | FastAPI |
+
+If you still see `backend` as a Web Service and **Python** at `/`:
+
+1. Push the latest `vercel.json` (with `experimentalServices`) to GitHub.
+2. Refresh the import page or re-import the repo.
+3. Do **not** use the broken template with `"routePrefix": "/../backend"`.
+
+**Do not** override Build Command / Output Directory in the dashboard — `vercel.json` defines each service.
 
 ### 3.3 Environment variables
 
@@ -217,12 +230,11 @@ vercel --prod   # production
 ## Project files Vercel relies on
 
 ```
-vercel.json              # Build, rewrites, Python function bundle
-api/index.py             # Serverless entry (Mangum → FastAPI)
-api/requirements.txt     # Points to backend/requirements.txt
-requirements.txt         # Python deps for installCommand
-backend/                 # FastAPI app (bundled into function)
+vercel.json              # experimentalServices: frontend + api
+backend/app/main.py      # FastAPI app (api service entrypoint)
+backend/requirements.txt # Python deps (api installCommand)
 models/                  # MUST be in git — insurance_model.pkl
+frontend/                # Vite React app (frontend service)
 frontend/dist/           # Generated at build (not in git)
 ```
 

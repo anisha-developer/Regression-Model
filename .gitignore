@@ -107,6 +107,9 @@ temp/
 # Keep models/ committed for Vercel — required for production API
 # Do NOT add models/*.pkl here
 
+# Duplicate model at repo root (canonical copy is models/)
+/insurance_model.pkl
+
 # Uncomment to ignore raw data copies (training CSV stays in data/ by default)
 # data/*.csv
 

@@ -44,7 +44,8 @@ npm run dev:web   # frontend only
 1. `python scripts/train_model.py` — create `models/insurance_model.pkl`
 2. Push the repo to GitHub (include the `models/` folder)
 3. Import on [Vercel](https://vercel.com) → Deploy
-4. Verify `https://<your-app>.vercel.app/api/health` shows `"model_loaded": true`
+4. On import, use preset **Services** and root `./` — see [docs/VERCEL_DEPLOYMENT.md](docs/VERCEL_DEPLOYMENT.md)
+5. Verify `https://<your-app>.vercel.app/api/health` shows `"model_loaded": true`
 
 ## API endpoints
 

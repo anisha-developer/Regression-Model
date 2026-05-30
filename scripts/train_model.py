@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[1]  # project root
 DATA_PATH = ROOT / "data" / "medical_insurance_dataset.csv"
 MODEL_PATH = ROOT / "models" / "insurance_model.pkl"
 METRICS_PATH = ROOT / "models" / "model_metrics.json"

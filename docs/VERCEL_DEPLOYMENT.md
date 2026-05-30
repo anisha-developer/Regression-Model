@@ -91,8 +91,12 @@ git add .
 git status
 ```
 
-**Confirm `models/insurance_model.pkl` appears in the staged files.**  
-If it is missing, run `python scripts/train_model.py` again before committing.
+**Confirm these are staged:**
+
+- `models/insurance_model.pkl`
+- `uv.lock` (locks Python **3.12** for Vercel)
+
+If the model is missing, run `python scripts/train_model.py` again.
 
 ```powershell
 git commit -m "Initial PremiumIQ app with trained model"
@@ -239,8 +243,9 @@ vercel --prod   # production
 
 ```
 vercel.json              # experimentalServices: frontend + api
+pyproject.toml           # Python dependencies (source of truth)
+uv.lock                  # MUST be in git — pins Python 3.12 + wheels
 backend/app/main.py      # FastAPI app (api service entrypoint)
-backend/requirements.txt # Python deps (api installCommand)
 models/                  # MUST be in git — insurance_model.pkl
 frontend/                # Vite React app (frontend service)
 frontend/dist/           # Generated at build (not in git)
@@ -273,9 +278,11 @@ Do **not** put `"runtime": "python3.12"` in `experimentalServices`. That field o
 
 **Fix (already in this repo):** Python is pinned to **3.12** via:
 
-- `runtime.txt`, `.python-version`, and `pyproject.toml` (`requires-python = ">=3.12,<3.13"`)
-- `pip install` (not `uv`) in `vercel.json` — do **not** set `"runtime": "python3.12"` (invalid in Services)
-- Vercel project setting: **Node.js 22.x** (required for Python 3.12 on Vercel)
+- **`uv.lock`** committed at repo root (`requires-python = "==3.12.*"`) — forces binary wheels, no Rust compile
+- `pyproject.toml` dependencies + `.python-version` (`3.12.13`)
+- `vercel.json` → `build.env.UV_PYTHON=3.12` and `uv sync --frozen`
+- Do **not** set `"runtime": "python3.12"` (invalid in Services)
+- Vercel project setting: **Node.js 22.x**
 
 Push the latest commit and redeploy. In the build log you should see **CPython 3.12**, not 3.14.
 

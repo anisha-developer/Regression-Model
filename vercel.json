@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "build": {
+    "env": {
+      "UV_PYTHON": "3.12",
+      "PYTHON_VERSION": "3.12"
+    }
+  },
   "experimentalServices": {
     "frontend": {
       "workspace": "frontend",
@@ -12,7 +18,7 @@
       "entrypoint": "backend/app/main.py",
       "framework": "fastapi",
       "routePrefix": "/api",
-      "installCommand": "pip install -r backend/requirements.txt",
+      "installCommand": "uv python pin 3.12 && uv sync --frozen --no-dev",
       "includeFiles": ["models/**", "data/**"],
       "maxDuration": 60,
       "memory": 1024

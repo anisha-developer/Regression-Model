@@ -18,7 +18,7 @@
       "root": "backend",
       "entrypoint": "app/main.py",
       "framework": "fastapi",
-      "routePrefix": "/",
+      "routePrefix": "/api",
       "includeFiles": ["models/**"],
       "excludeFiles": [
         "frontend/**",
